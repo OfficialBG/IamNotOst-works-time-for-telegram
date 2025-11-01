@@ -1,0 +1,733 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <title>IamNotOst - BG Assistant</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary: #6c5ce7;
+            --primary-dark: #5649c0;
+            --secondary: #00cec9;
+            --dark: #0a0a0a;
+            --dark-light: #151515;
+            --gray: #2a2a2a;
+            --light: #e0e0e0;
+            --white: #ffffff;
+            --shadow: 0 4px 12px rgba(0, 0, 0, 0.25);
+            --transition: all 0.3s ease;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+        }
+
+        body {
+            background-color: var(--dark);
+            color: var(--light);
+            line-height: 1.5;
+            overflow-x: hidden;
+            font-size: 14px;
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 0 15px;
+        }
+
+        /* Header */
+        header {
+            background-color: var(--dark-light);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            border-bottom: 1px solid var(--gray);
+        }
+
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 12px 0;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .logo-icon {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            width: 36px;
+            height: 36px;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 18px;
+            color: var(--white);
+        }
+
+        .logo-text {
+            font-size: 18px;
+            font-weight: 700;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        /* Language Toggle */
+        .language-toggle {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            background-color: var(--gray);
+            border-radius: 20px;
+            padding: 4px;
+            position: relative;
+            cursor: pointer;
+            transition: var(--transition);
+            border: 1px solid #444;
+            width: fit-content;
+        }
+
+        .language-option {
+            padding: 6px 12px;
+            border-radius: 16px;
+            font-weight: 600;
+            font-size: 12px;
+            z-index: 2;
+            transition: var(--transition);
+            min-width: 40px;
+            text-align: center;
+        }
+
+        .language-active {
+            color: var(--white);
+        }
+
+        .language-slider {
+            position: absolute;
+            height: calc(100% - 8px);
+            width: calc(50% - 4px);
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            border-radius: 16px;
+            transition: var(--transition);
+            left: 4px;
+        }
+
+        .language-en .language-slider {
+            left: calc(50% + 0px);
+        }
+
+        /* Hero Section */
+        .hero {
+            padding: 40px 0 30px;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(circle at 30% 50%, rgba(108, 92, 231, 0.08), transparent 50%);
+        }
+
+        .hero h1 {
+            font-size: 2.2rem;
+            margin-bottom: 15px;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .hero p {
+            font-size: 1rem;
+            max-width: 600px;
+            margin: 0 auto;
+            color: var(--light);
+        }
+
+        .highlight {
+            color: var(--secondary);
+            font-weight: 600;
+        }
+
+        /* Content Sections */
+        .section {
+            padding: 40px 0;
+            position: relative;
+        }
+
+        .section-title {
+            font-size: 1.6rem;
+            margin-bottom: 25px;
+            text-align: center;
+            position: relative;
+            width: 100%;
+        }
+
+        .section-title::after {
+            content: '';
+            position: absolute;
+            bottom: -6px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 80px;
+            height: 2px;
+            background: linear-gradient(90deg, var(--primary), var(--secondary));
+            border-radius: 1px;
+        }
+
+        .content-block {
+            background-color: var(--dark-light);
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 20px;
+            transition: var(--transition);
+            border: 1px solid var(--gray);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .content-block::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 3px;
+            height: 100%;
+            background: linear-gradient(to bottom, var(--primary), var(--secondary));
+        }
+
+        .content-block:hover {
+            transform: translateY(-3px);
+            box-shadow: var(--shadow);
+        }
+
+        .content-block h3 {
+            font-size: 1.3rem;
+            margin-bottom: 15px;
+            color: var(--secondary);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .content-block ul {
+            list-style-type: none;
+            padding-left: 0;
+        }
+
+        .content-block li {
+            margin-bottom: 8px;
+            padding-left: 20px;
+            position: relative;
+            transition: opacity 0.3s ease;
+        }
+
+        .content-block li::before {
+            content: '•';
+            color: var(--primary);
+            font-size: 1.2rem;
+            position: absolute;
+            left: 0;
+            top: -2px;
+        }
+
+        .schedule {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+            margin-top: 15px;
+        }
+
+        .schedule-item {
+            flex: 1;
+            min-width: 200px;
+            background: linear-gradient(135deg, var(--gray), var(--dark-light));
+            padding: 15px;
+            border-radius: 8px;
+            text-align: center;
+            transition: var(--transition);
+            border: 1px solid #333;
+        }
+
+        .schedule-item:hover {
+            transform: scale(1.02);
+        }
+
+        .schedule-item i {
+            font-size: 1.5rem;
+            margin-bottom: 10px;
+            color: var(--primary);
+        }
+
+        .schedule-item h4 {
+            font-size: 1.1rem;
+            margin-bottom: 8px;
+            color: var(--secondary);
+        }
+
+        /* Footer */
+        footer {
+            background-color: var(--dark-light);
+            padding: 25px 0;
+            text-align: center;
+            border-top: 1px solid var(--gray);
+            margin-top: 20px;
+        }
+
+        .footer-content {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .social-links {
+            display: flex;
+            gap: 12px;
+        }
+
+        .social-link {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            background-color: var(--gray);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--light);
+            font-size: 1.1rem;
+            transition: var(--transition);
+            text-decoration: none;
+            border: 1px solid #444;
+        }
+
+        .social-link:hover {
+            background-color: var(--primary);
+            transform: translateY(-2px);
+        }
+
+        .copyright {
+            color: var(--light);
+            opacity: 0.7;
+            font-size: 0.8rem;
+        }
+
+        /* Text Animation */
+        .text-transition {
+            transition: opacity 0.3s ease;
+            display: inline-block;
+            width: 100%;
+        }
+
+        .text-transition.fade-out {
+            opacity: 0;
+        }
+
+        .text-transition.fade-in {
+            opacity: 1;
+        }
+
+        /* List item animation */
+        .list-item-transition {
+            transition: opacity 0.3s ease;
+        }
+
+        .list-item-transition.fade-out {
+            opacity: 0;
+        }
+
+        .list-item-transition.fade-in {
+            opacity: 1;
+        }
+
+        /* Scroll Animations */
+        .fade-scroll {
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 0.6s ease, transform 0.6s ease;
+        }
+
+        .fade-scroll.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .hero h1 {
+                font-size: 1.8rem;
+            }
+            
+            .section-title {
+                font-size: 1.4rem;
+            }
+            
+            .content-block {
+                padding: 15px;
+            }
+            
+            .schedule {
+                flex-direction: column;
+            }
+            
+            .schedule-item {
+                min-width: 100%;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .header-content {
+                padding: 10px 0;
+            }
+            
+            .hero {
+                padding: 30px 0 20px;
+            }
+            
+            .hero h1 {
+                font-size: 1.6rem;
+            }
+            
+            .hero p {
+                font-size: 0.9rem;
+            }
+            
+            .section {
+                padding: 30px 0;
+            }
+            
+            .language-option {
+                padding: 5px 10px;
+                font-size: 11px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <div class="container">
+            <div class="header-content">
+                <div class="logo">
+                    <div class="logo-icon">
+                        <i class="fas fa-headset"></i>
+                    </div>
+                    <div class="logo-text">IamNotOst</div>
+                </div>
+                <div class="language-toggle" id="languageToggle">
+                    <div class="language-slider"></div>
+                    <div class="language-option language-active" data-lang="ru">RU</div>
+                    <div class="language-option" data-lang="en">EN</div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="container">
+            <h1 id="hero-title" class="text-transition">IamNotOst – BG Assistant</h1>
+            <p id="hero-description" class="text-transition">Меня зовут Ост, и я — официальный ассистент игры Blockman Go для русскоязычного сообщества.</p>
+        </div>
+    </section>
+
+    <!-- Main Content -->
+    <main class="container">
+        <!-- Introduction Section -->
+        <section class="section">
+            <h2 class="section-title text-transition" id="about-title">Обо мне</h2>
+            <div class="content-block fade-scroll">
+                <h3><i class="fas fa-user"></i> <span id="who-am-i-title" class="text-transition">Кто я?</span></h3>
+                <p id="about-text" class="text-transition">Меня зовут Ост, и я — официальный ассистент игры <span class="highlight">Blockman Go</span> для русскоязычного сообщества. Так как в русском регионе я работаю один, я выстроил свой график максимально эффективно, чтобы успевать решать ваши вопросы и оставаться продуктивным.</p>
+            </div>
+        </section>
+
+        <!-- Schedule Section -->
+        <section class="section">
+            <h2 class="section-title text-transition" id="schedule-title">Мой график работы</h2>
+            <div class="content-block fade-scroll">
+                <h3><i class="fas fa-clock"></i> <span id="telegram-schedule-title" class="text-transition">График в Telegram</span></h3>
+                <div class="schedule">
+                    <div class="schedule-item">
+                        <i class="fas fa-calendar-week"></i>
+                        <h4 id="weekdays-title" class="text-transition">Понедельник - Пятница</h4>
+                        <p id="weekdays-time" class="text-transition">с 16:00 до 22:00 (МСК)</p>
+                    </div>
+                    <div class="schedule-item">
+                        <i class="fas fa-calendar-day"></i>
+                        <h4 id="weekend-title" class="text-transition">Суббота - Воскресенье</h4>
+                        <p id="weekend-time" class="text-transition">Выходные дни</p>
+                    </div>
+                    <div class="schedule-item">
+                        <i class="fas fa-exclamation-circle"></i>
+                        <h4 id="exceptions-title" class="text-transition">Исключения</h4>
+                        <p id="exceptions-text" class="text-transition">В редких случаях возможны исключения</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- What it means Section -->
+        <section class="section">
+            <h2 class="section-title text-transition" id="meaning-title">Что это значит для вас?</h2>
+            <div class="content-block fade-scroll">
+                <h3><i class="fas fa-info-circle"></i> <span id="activity-title" class="text-transition">Моя деятельность</span></h3>
+                <p id="activity-text-1" class="text-transition">В рабочие часы я активно помогаю сообществу <span class="highlight">Blockman Go</span> в Telegram: анализирую обращения, собираю информацию об ошибках, передаю ценные идеи и отзывы разработчикам, а также координирую процессы, чтобы игра становилась лучше с каждым днем.</p>
+                <p id="activity-text-2" class="text-transition">В выходные я отдыхаю и набираюсь сил, чтобы в понедельник снова быть в строю с новыми идеями и энергией!</p>
+            </div>
+        </section>
+
+        <!-- Important Notes Section -->
+        <section class="section">
+            <h2 class="section-title text-transition" id="notes-title">Важные примечания</h2>
+            <div class="content-block fade-scroll">
+                <h3><i class="fas fa-exclamation-triangle"></i> <span id="processing-title" class="text-transition">Обработка обращений</span></h3>
+                <ul id="notes-list">
+                    <!-- List items will be populated by JavaScript -->
+                </ul>
+            </div>
+        </section>
+
+        <!-- Final Section -->
+        <section class="section">
+            <div class="content-block fade-scroll">
+                <h3><i class="fas fa-heart"></i> <span id="gratitude-title" class="text-transition">Благодарность</span></h3>
+                <p id="gratitude-text" class="text-transition">Спасибо, что вы с нами! Давайте вместе делать <span class="highlight">Blockman Go</span> еще лучше.</p>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div class="social-links">
+                    <a href="#" class="social-link"><i class="fab fa-telegram"></i></a>
+                    <a href="#" class="social-link"><i class="fab fa-discord"></i></a>
+                    <a href="#" class="social-link"><i class="fab fa-youtube"></i></a>
+                </div>
+                <div class="copyright text-transition" id="copyright-text">
+                    &copy; 2023 IamNotOst - BG Assistant. Все права защищены.
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Language content
+        const content = {
+            ru: {
+                heroTitle: "IamNotOst – BG Assistant",
+                heroDescription: "Меня зовут Ост, и я — официальный ассистент игры Blockman Go для русскоязычного сообщества.",
+                aboutTitle: "Обо мне",
+                whoAmITitle: "Кто я?",
+                aboutText: "Меня зовут Ост, и я — официальный ассистент игры <span class='highlight'>Blockman Go</span> для русскоязычного сообщества. Так как в русском регионе я работаю один, я выстроил свой график максимально эффективно, чтобы успевать решать ваши вопросы и оставаться продуктивным.",
+                scheduleTitle: "Мой график работы",
+                telegramScheduleTitle: "График в Telegram",
+                weekdaysTitle: "Понедельник - Пятница",
+                weekdaysTime: "с 16:00 до 22:00 (МСК)",
+                weekendTitle: "Суббота - Воскресенье",
+                weekendTime: "Выходные дни",
+                exceptionsTitle: "Исключения",
+                exceptionsText: "В редких случаях возможны исключения",
+                meaningTitle: "Что это значит для вас?",
+                activityTitle: "Моя деятельность",
+                activityText1: "В рабочие часы я активно помогаю сообществу <span class='highlight'>Blockman Go</span> в Telegram: анализирую обращения, собираю информацию об ошибках, передаю ценные идеи и отзывы разработчикам, а также координирую процессы, чтобы игра становилась лучше с каждым днем.",
+                activityText2: "В выходные я отдыхаю и набираюсь сил, чтобы в понедельник снова быть в строю с новыми идеями и энергией!",
+                notesTitle: "Важные примечания",
+                processingTitle: "Обработка обращений",
+                notesList: [
+                    "Обращения, поступившие в нерабочее время или на выходных, будут обработаны в приоритетном порядке в первый же рабочий день.",
+                    "Для обеспечения справедливости и порядка я просматриваю чаты последовательно, начиная с самых старых непрочитанных сообщений и заканчивая новыми. Это самая честная система для всех.",
+                    "Поэтому пожалуйста, не стоит дублировать одно и то же сообщение — ваше обращение обязательно будет увиденным и обработанным.",
+                    "Спамить не нужно — это только замедлит общую работу.",
+                    "Я очень ценю ваше внимание к игре и ваше терпение. Ни одно важное сообщение не останется без ответа."
+                ],
+                gratitudeTitle: "Благодарность",
+                gratitudeText: "Спасибо, что вы с нами! Давайте вместе делать <span class='highlight'>Blockman Go</span> еще лучше.",
+                copyrightText: "&copy; 2023 IamNotOst - BG Assistant. Все права защищены."
+            },
+            en: {
+                heroTitle: "IamNotOst – BG Assistant",
+                heroDescription: "My name is Ost, and I am the official Blockman Go assistant for the Russian-speaking community.",
+                aboutTitle: "About Me",
+                whoAmITitle: "Who am I?",
+                aboutText: "My name is Ost, and I am the official <span class='highlight'>Blockman Go</span> assistant for the Russian-speaking community. Since I work alone in the Russian region, I have built my schedule as efficiently as possible to have time to solve your questions and remain productive.",
+                scheduleTitle: "My Work Schedule",
+                telegramScheduleTitle: "Telegram Schedule",
+                weekdaysTitle: "Monday - Friday",
+                weekdaysTime: "from 4:00 PM to 10:00 PM (Moscow time)",
+                weekendTitle: "Saturday - Sunday",
+                weekendTime: "Days off",
+                exceptionsTitle: "Exceptions",
+                exceptionsText: "In rare cases, exceptions are possible",
+                meaningTitle: "What does this mean for you?",
+                activityTitle: "My Activities",
+                activityText1: "During working hours, I actively help the <span class='highlight'>Blockman Go</span> community on Telegram: I analyze requests, collect information about errors, pass valuable ideas and feedback to developers, and coordinate processes to make the game better every day.",
+                activityText2: "On weekends, I rest and recharge to be back on Monday with new ideas and energy!",
+                notesTitle: "Important Notes",
+                processingTitle: "Request Processing",
+                notesList: [
+                    "Requests received outside working hours or on weekends will be processed on a priority basis on the first working day.",
+                    "To ensure fairness and order, I review chats sequentially, starting with the oldest unread messages and ending with new ones. This is the fairest system for everyone.",
+                    "Therefore, please do not duplicate the same message - your request will definitely be seen and processed.",
+                    "No need to spam - this only slows down the overall work.",
+                    "I really appreciate your attention to the game and your patience. No important message will go unanswered."
+                ],
+                gratitudeTitle: "Gratitude",
+                gratitudeText: "Thank you for being with us! Let's make <span class='highlight'>Blockman Go</span> even better together.",
+                copyrightText: "&copy; 2023 IamNotOst - BG Assistant. All rights reserved."
+            }
+        };
+
+        // DOM elements
+        const languageToggle = document.getElementById('languageToggle');
+        const textElements = document.querySelectorAll('.text-transition');
+        
+        // Get saved language from localStorage or default to Russian
+        const getSavedLanguage = () => {
+            return localStorage.getItem('selectedLanguage') || 'ru';
+        };
+        
+        // Save language to localStorage
+        const saveLanguage = (lang) => {
+            localStorage.setItem('selectedLanguage', lang);
+        };
+        
+        // Initialize with saved language
+        const initLanguage = () => {
+            const savedLang = getSavedLanguage();
+            
+            // Set toggle position
+            if (savedLang === 'en') {
+                languageToggle.classList.add('language-en');
+            } else {
+                languageToggle.classList.remove('language-en');
+            }
+            
+            // Update content
+            updateContent(savedLang);
+        };
+        
+        // Initialize on page load
+        document.addEventListener('DOMContentLoaded', initLanguage);
+        
+        // Language toggle event
+        languageToggle.addEventListener('click', function() {
+            const isEnglish = this.classList.contains('language-en');
+            const newLang = isEnglish ? 'ru' : 'en';
+            
+            // Toggle class for slider animation
+            this.classList.toggle('language-en');
+            
+            // Save language preference
+            saveLanguage(newLang);
+            
+            // Change language with smooth transition
+            changeLanguage(newLang);
+        });
+        
+        // Change language with animation
+        function changeLanguage(lang) {
+            // Fade out current content
+            textElements.forEach(el => {
+                el.classList.remove('fade-in');
+                el.classList.add('fade-out');
+            });
+            
+            // Also fade out list items
+            const listItems = document.querySelectorAll('#notes-list li');
+            listItems.forEach(item => {
+                item.classList.remove('fade-in');
+                item.classList.add('fade-out');
+            });
+            
+            // Wait for fade out, then update content and fade in
+            setTimeout(() => {
+                updateContent(lang);
+                
+                textElements.forEach(el => {
+                    el.classList.remove('fade-out');
+                    el.classList.add('fade-in');
+                });
+            }, 300);
+        }
+        
+        // Update content function
+        function updateContent(lang) {
+            // Update all text content
+            document.getElementById('hero-title').textContent = content[lang].heroTitle;
+            document.getElementById('hero-description').textContent = content[lang].heroDescription;
+            document.getElementById('about-title').textContent = content[lang].aboutTitle;
+            document.getElementById('who-am-i-title').textContent = content[lang].whoAmITitle;
+            document.getElementById('about-text').innerHTML = content[lang].aboutText;
+            document.getElementById('schedule-title').textContent = content[lang].scheduleTitle;
+            document.getElementById('telegram-schedule-title').textContent = content[lang].telegramScheduleTitle;
+            document.getElementById('weekdays-title').textContent = content[lang].weekdaysTitle;
+            document.getElementById('weekdays-time').textContent = content[lang].weekdaysTime;
+            document.getElementById('weekend-title').textContent = content[lang].weekendTitle;
+            document.getElementById('weekend-time').textContent = content[lang].weekendTime;
+            document.getElementById('exceptions-title').textContent = content[lang].exceptionsTitle;
+            document.getElementById('exceptions-text').textContent = content[lang].exceptionsText;
+            document.getElementById('meaning-title').textContent = content[lang].meaningTitle;
+            document.getElementById('activity-title').textContent = content[lang].activityTitle;
+            document.getElementById('activity-text-1').innerHTML = content[lang].activityText1;
+            document.getElementById('activity-text-2').innerHTML = content[lang].activityText2;
+            document.getElementById('notes-title').textContent = content[lang].notesTitle;
+            document.getElementById('processing-title').textContent = content[lang].processingTitle;
+            
+            // Update list items with animation
+            const notesList = document.getElementById('notes-list');
+            notesList.innerHTML = '';
+            content[lang].notesList.forEach(item => {
+                const li = document.createElement('li');
+                li.innerHTML = item;
+                li.classList.add('list-item-transition', 'fade-out');
+                notesList.appendChild(li);
+                
+                // Animate list items in sequence
+                setTimeout(() => {
+                    li.classList.remove('fade-out');
+                    li.classList.add('fade-in');
+                }, 100);
+            });
+            
+            document.getElementById('gratitude-title').textContent = content[lang].gratitudeTitle;
+            document.getElementById('gratitude-text').innerHTML = content[lang].gratitudeText;
+            document.getElementById('copyright-text').innerHTML = content[lang].copyrightText;
+        }
+        
+        // Scroll animations
+        const fadeScrollElements = document.querySelectorAll('.fade-scroll');
+        
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                }
+            });
+        }, {
+            threshold: 0.1
+        });
+        
+        fadeScrollElements.forEach(element => {
+            observer.observe(element);
+        });
+    </script>
+</body>
+</html>
